@@ -1,9 +1,8 @@
-# tailwindcss-spring
+# unocss-spring
 
-A Tailwind CSS plugin that adds spring animations to your project using CSS linear().
+A UnoCSS preset that adds spring animations to your project using CSS linear().
 Define just two parameters and let the plugin generate the easing curve and the animation duration.
 
-Check out the the plugin in action on [this website](https://tailwindcss-spring.kvin.me/).
 
 ## Parameters
 
@@ -13,31 +12,65 @@ Check out the the plugin in action on [this website](https://tailwindcss-spring.
 Example:
 
 ```html
-<div class="spring-bounce-60 spring-duration-300 transition-transform hover:scale-150"
+<div class="spring-bounce-60 spring-duration-300 transition-transform hover:scale-150" />
 ```
+
+Because it's UnoCSS, you can also use arbitrary values without the square braces.
+
+```html
+<div class="spring-bounce-65 spring-duration-301 ..." />
+```
+
+It's recommended to also use the variant group transformer from UnoCSS s ince it's more ergonomic to do complex animations. You can also pattern match on data attributes.
+
+```
+data-[state='open']:(
+  [transition:width_400ms,height_400ms,inset_200ms,transform_400ms]
+  w-90dvw
+  inset-4 top-unset
+
+  spring-duration-500
+  spring-bounce-55
+)
+data-[state='closed']:(
+  [transition:width_300ms,height_150ms,inset_200ms,transform_200ms]
+  w-17em active:scale-95
+  spring-duration-300
+  spring-bounce-20
+)
+```
+
 
 ## Installation
 
-Install the plugin via npm:
+1. Copy uno-spring-transition.ts into your project.
 
-```bash
-npm install tailwindcss-spring
-```
+2. Then, add the preset to your `uno.config.ts` file:
 
-Then, add the plugin to your `tailwind.config.js` file:
+```ts
+// uno.config.ts
+import { defineConfig, presetMini } from 'unocss'
+import { presetSpringTransition } from './uno-spring-transition'
 
-```javascript
-// tailwind.config.js
-module.exports = {
-  theme: {
-    // ...
+export default defineConfig({
+  layers: {
+    base:       0,
+    components: 1,
+    utilities:  2,
+    overrides:  99 // add overrides layer so that it has more priority than the default cubic-bezier
   },
-  plugins: [
-    require("tailwindcss-spring"),
-    // ...
-  ],
-};
+
+  // ...
+  
+  presets: [
+    presetMini(),
+    
+    // place after your base preset
+    presetSpringTransition()
+  ]
+})
 ```
+
 
 ## Usage
 
@@ -55,10 +88,7 @@ This class defines the perceptual duration of the animation in milliseconds.
 
 - Since spring easings often have long settling periods, the perceptual duration isn't used as the actual animation duration. Instead, the real duration is calculated based on the `spring-bounce-*` value.
 
+
 ## More Info
 
-This plugin was created by [Kevin Grajeda](https://x.com/k_grajeda). It's open source and available on [GitHub](https://github.com/KevinGrajeda/tailwindcss-spring).
-
-You can also check out my [CSS spring easing generator](https://www.kvin.me/css-springs).
-
-A special thanks to [Jake Archibald](https://x.com/jaffathecake) for his work on the [linear easing generator](https://linear-easing-generator.netlify.app/). I used some of [his](https://github.com/jakearchibald/linear-easing-generator) code for spring calculations.
+The Tailwind version of this plugin, of which this is just an adaptation of, was originally created by [Kevin Grajeda](https://x.com/k_grajeda). The original is open source and available on [GitHub](https://github.com/KevinGrajeda/tailwindcss-spring). I recommend reading his original description for further documentation on the perceptual part of it and so on, it's pretty neat.
