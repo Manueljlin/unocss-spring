@@ -21,7 +21,7 @@ Because it's UnoCSS, you can also use arbitrary values without the square braces
 <div class="spring-bounce-65 spring-duration-301 ..." />
 ```
 
-It's recommended to also use the variant group transformer from UnoCSS s ince it's more ergonomic to do complex animations. You can also pattern match on data attributes.
+It's recommended to also use the variant group transformer from UnoCSS since it's more ergonomic to do complex animations. You can also pattern match on data attributes.
 
 ```
 data-[state='open']:(
